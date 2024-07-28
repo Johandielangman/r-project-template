@@ -1,0 +1,86 @@
+---
+title: "EDA"
+author: "Johan Hanekom"
+date: "2024-07-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## EDA
+
+```{r}
+
+board_games_raw <- as_tibble(read.csv(file.path(DATA_RAW_DIR, "board_games.csv")))
+
+board_games_raw %>%
+  count(publisher, sort = TRUE) %>%
+  head()
+
+board_games_raw %>%
+  filter(users_rated >= 500) %>%
+  ggplot(aes(average_rating)) +
+  geom_histogram()
+
+board_games_raw %>%
+  ggplot(aes(average_rating)) +
+  geom_histogram()
+
+board_games_raw %>%
+  ggplot(aes(users_rated)) +
+  geom_histogram() +
+  scale_x_log10()
+
+board_games_raw %>%
+  count(year_published) %>%
+  arrange(desc(year_published)) %>%
+  ggplot(aes(year_published, n)) +
+  geom_line()
+
+
+```
+
+
+```{r}
+
+categorical_variables <- board_games_raw %>%
+  select(
+    game_id,
+    name,
+    family,
+    expansion,
+    category,
+    artist,
+    designer
+  ) %>%
+  gather(
+    key="type",
+    value="value",
+    -game_id,
+    -name
+  ) %>%
+  filter(!is.na(value)) %>%
+  separate_rows(value, sep=",") %>%
+  arrange(game_id)
+
+save_to_processed(categorical_variables, "01_caregtorical_variables.rds")
+categorical_variables <- load_from_processed("01_caregtorical_variables.rds")
+
+categorical_counts <- categorical_variables %>%
+  count(type, value, sort=TRUE)
+
+save_to_processed(categorical_counts, "02_categorical_counts.rds")
+categorical_counts <- load_from_processed("02_categorical_counts.rds")
+
+categorical_counts %>%
+  filter(type == "category") %>%
+  head(20) %>%
+  mutate(value = fct_reorder(value, n)) %>%
+  ggplot(aes(value, n)) +
+  geom_col() +
+  coord_flip()
+
+```
+

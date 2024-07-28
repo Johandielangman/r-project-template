@@ -1,0 +1,2 @@
+MY_COOL_API_KEY="abc"
+DISABLE_RENV="true"
