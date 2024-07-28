@@ -223,6 +223,6 @@ This project is [Apache](http://www.apache.org/licenses/LICENSE-2.0) licensed.
 
 ---
 
-Made with ❤️ by Johandielangman
+Made with ❤️ by [Johandielangman](https://github.com/Johandielangman)
 
 [![BuyMeACoffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/johanlangman)
